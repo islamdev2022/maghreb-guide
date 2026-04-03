@@ -33,6 +33,8 @@ export const viewport: Viewport = {
   themeColor: "#6366f1",
 };
 
+import ReactQueryProvider from "@/providers/ReactQueryProvider";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -44,7 +46,11 @@ export default function RootLayout({
         <link rel="icon" href="/icons/icon-192.png" type="image/png" />
         <link rel="apple-touch-icon" href="/icons/icon-512.png" />
       </head>
-      <body>{children}</body>
+      <body>
+        <ReactQueryProvider>
+          {children}
+        </ReactQueryProvider>
+      </body>
     </html>
   );
 }
