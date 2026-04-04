@@ -1,10 +1,14 @@
 import type { Metadata, Viewport } from "next";
+import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair" });
+
 export const metadata: Metadata = {
-  title: "Smart Offline GPS — Maghreb",
+  title: "Maghreb Guide",
   description:
-    "Offline GPS, downloadable maps, and cultural points of interest for Algeria, Morocco & Tunisia. Navigate sans internet!",
+    "Cultural points of interest for Algeria, Morocco & Tunisia.",
   keywords: [
     "offline GPS",
     "Maghreb",
@@ -17,9 +21,9 @@ export const metadata: Metadata = {
     "PWA",
   ],
   openGraph: {
-    title: "Smart Offline GPS — Maghreb",
+    title: "Maghreb Guide",
     description:
-      "Navigate the Maghreb offline — download maps, discover POIs, and find routes without internet.",
+      "Cultural points of interest for Algeria, Morocco & Tunisia.",
     type: "website",
     locale: "fr_FR",
   },
@@ -41,7 +45,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr">
+    <html lang="fr" className={`${inter.variable} ${playfair.variable}`}>
       <head>
         <link rel="icon" href="/icons/icon-192.png" type="image/png" />
         <link rel="apple-touch-icon" href="/icons/icon-512.png" />

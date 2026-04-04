@@ -1,4 +1,21 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
+@config "../../tailwind.config.ts";
+
+@theme {
+  --color-maghreb-primary: #C84B31;
+  --color-maghreb-primary-light: #D97757;
+  --color-maghreb-secondary: #2D46B9;
+  --color-maghreb-secondary-dark: #1E3A8A;
+  --color-maghreb-sand: #F5F0E6;
+  --color-maghreb-medina: #FAF8F5;
+  --color-maghreb-olive: #6B705C;
+  --color-maghreb-gold: #D4AF37;
+  --font-serif: "Playfair Display", var(--font-playfair), serif;
+  --font-sans: "Inter", var(--font-inter), sans-serif;
+  --radius-moorish: 3rem 3rem 0.5rem 0.5rem;
+  --shadow-warm: 0 10px 40px -10px rgba(200, 75, 49, 0.15);
+}
+
 @import "tailwindcss";
 
 /* ═══════════════════════════════════════════════════════════
@@ -6,35 +23,36 @@
    ═══════════════════════════════════════════════════════════ */
 
 :root {
-  /* colour tokens */
-  --bg-primary: #0a0f1e;
-  --bg-secondary: #111827;
-  --bg-card: #1e293b;
-  --bg-card-hover: #263348;
-  --text-primary: #f1f5f9;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  --accent: #6366f1;
-  --accent-light: #818cf8;
-  --success: #22c55e;
+  /* colour tokens adapted to light/warm theme */
+  --bg-primary: #FAF8F5;
+  --bg-secondary: #F5F0E6;
+  --bg-card: #FFFFFF;
+  --bg-card-hover: #F8F9FA;
+  --text-primary: #1F2937;
+  --text-secondary: #4B5563;
+  --text-muted: #6B7280;
+  --accent: #C84B31;
+  --accent-light: #D97757;
+  --success: #6B705C;
   --danger: #ef4444;
-  --warning: #f59e0b;
-  --border: rgba(255, 255, 255, 0.08);
+  --warning: #D4AF37;
+  --border: rgba(0, 0, 0, 0.08);
 
   /* radius */
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
   --radius-full: 9999px;
+  --radius-moorish: 30px 30px 8px 8px;
 }
-
-
 
 html,
 body {
   height: 100%;
-  font-family: "Inter", system-ui, sans-serif;
-  background: var(--bg-primary);
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  /* Zellige-inspired subtle SVG pattern */
+  background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 20.5V18H0v-2h20v-2H0v-2h20v-2H0V8h20V6H0V4h20V2H0V0h22v20h2V0h2v20h2V0h2v20h2V0h2v20h2V0h2v20h2v2H20v-1.5zM0 20h2v20H0V20zm4 0h2v20H4V20zm4 0h2v20H8V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 4h20v2H20v-2zm0 4h20v2H20v-2zm0 4h20v2H20v-2zm0 4h20v2H20v-2z' fill='%23c84b31' fill-opacity='0.02' fill-rule='evenodd'/%3E%3C/svg%3E");
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
 }

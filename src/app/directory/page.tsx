@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import { useGuides } from "@/hooks/useMockQueries";
-import { Search, Star, Languages, MessageSquare, Briefcase, CalendarCheck, CalendarX, X, Send } from "lucide-react";
+import { Search, Star, Languages, MessageSquare, Briefcase, CalendarCheck, CalendarX, X, Send, WifiOff, MapPin, ChevronLeft } from "lucide-react";
 import { useTravelStore } from "@/store/useTravelStore";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 
 export default function Directory() {
     const [searchTerm, setSearchTerm] = useState("");
@@ -45,180 +46,205 @@ export default function Directory() {
     };
 
     return (
-        <div className="p-6 max-w-5xl mx-auto min-h-screen bg-[#0a0f1e] text-slate-200 relative overflow-x-hidden">
-            <div className="absolute -top-32 -left-32 w-96 h-96 bg-indigo-500/10 blur-[120px] rounded-full pointer-events-none" />
+        <div className="min-h-screen bg-maghreb-medina text-slate-800 pb-32">
 
-            <motion.header
-                initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}
-                className="mb-8 border-b border-indigo-500/20 pb-6 relative z-10"
-            >
-                <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-linear-to-r from-white to-slate-400 mb-3">Local Maghreb Directory</h1>
-                <p className="text-slate-400 max-w-2xl text-lg">Connect directly with vetted local artisans, desert guides, and historians. Our network works seamlessly even in cached offline mode.</p>
-            </motion.header>
+            {/* Header Area */}
+            <div className="relative pt-12 pb-12 px-6">
+                <div className="absolute inset-0 z-0 pointer-events-none bg-[url('data:image/svg+xml,%3Csvg width=\\'60\\' height=\\'60\\' viewBox=\\'0 0 60 60\\' xmlns=\\'http://www.w3.org/2000/svg\\'%3E%3Cpath d=\\'M30 0l30 30-30 30L0 30zM15 15l15 15-15 15L0 30zM45 15l15 15-15 15-15-15z\\' fill=\\'%23c84b31\\' fill-opacity=\\'1\\' fill-rule=\\'evenodd\\'/%3E%3C/svg%3E')]" />
+                <div className="absolute top-0 right-0 w-80 h-80 bg-maghreb-primary/5 blur-[120px] rounded-full pointer-events-none" />
+                <div className="max-w-5xl mx-auto relative z-10">
+                    <Link href="/" className="inline-flex items-center gap-2 mb-6 text-maghreb-primary hover:text-maghreb-primaryDark font-bold text-sm bg-white p-2 rounded-full border border-maghreb-primary/20 shadow-sm transition-all hover:pr-4">
+                        <span className="p-1.5 bg-maghreb-primary/10 rounded-full"><ChevronLeft size={16} /></span>
+                        Accueil
+                    </Link>
+                    <motion.header
+                        initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}
+                        className="mb-10 pb-6 border-b border-maghreb-primary/10"
+                    >
+                        <h1 className="text-4xl md:text-5xl font-serif font-bold text-maghreb-primaryDark mb-4">Artisans & Guides</h1>
+                        <p className="text-slate-500 max-w-2xl text-lg font-medium">Rencontrez des experts locaux vérifiés. Des guides du désert aux maîtres artisans, notre réseau reste accessible même hors connexion.</p>
+                    </motion.header>
 
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} className="mb-10 flex gap-4 relative z-10">
-                <div className="relative flex-1 group">
-                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-500 group-focus-within:text-indigo-400 transition-colors">
-                        <Search size={22} />
-                    </div>
-                    <input
-                        type="text"
-                        placeholder="Search guides, cities, or specialties..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        disabled={!isOnline && !guides}
-                        className="w-full pl-12 pr-4 py-4 bg-slate-900/50 backdrop-blur-md border border-white/10 rounded-2xl text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all disabled:opacity-50 shadow-[inset_0_2px_4px_rgba(0,0,0,0.4)]"
-                    />
-                </div>
-            </motion.div>
-
-            {isLoading && (
-                <div className="grid gap-6">
-                    {[1, 2, 3].map(i => (
-                        <div key={i} className="animate-pulse bg-slate-800/80 h-45 rounded-3xl border border-white/5 shadow-md"></div>
-                    ))}
-                </div>
-            )}
-
-            <AnimatePresence>
-                {!isLoading && !filteredGuides && !isOnline && (
-                    <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="p-8 text-center bg-slate-900/50 rounded-3xl border border-white/5 backdrop-blur-md">
-                        <p className="text-slate-400">Offline mode active. Connect to download the directory index.</p>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-
-            {filteredGuides && (
-                <motion.div variants={containerVariants} initial="hidden" animate="show" className="grid gap-6 relative z-10">
-                    {filteredGuides.map(guide => (
-                        <motion.div key={guide.id} variants={itemVariants} className="group relative flex flex-col md:flex-row bg-slate-900/60 rounded-3xl border border-white/5 overflow-hidden backdrop-blur-xl hover:border-indigo-500/40 hover:shadow-[0_0_30px_rgba(99,102,241,0.15)] transition-all p-8 gap-8">
-
-                            <div className="shrink-0 flex flex-col items-center">
-                                <div className="relative">
-                                    <div className="absolute -inset-1 bg-linear-to-tr from-indigo-500 to-purple-500 rounded-full blur opacity-0 group-hover:opacity-50 transition duration-500"></div>
-                                    <img src={guide.avatarUrl} alt={guide.name} className="relative w-28 h-28 rounded-full border-2 border-slate-700 group-hover:border-indigo-400 object-cover mb-4 transition-colors" />
-                                </div>
-                                <div className="flex items-center gap-1.5 text-yellow-500 font-bold bg-yellow-500/10 px-3 py-1.5 rounded-full border border-yellow-500/20">
-                                    <Star size={16} className="fill-current" /> {guide.rating} <span className="text-slate-400 text-xs ml-1 font-medium">({guide.reviews})</span>
-                                </div>
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} className="mb-12 relative z-10">
+                        <div className="relative flex-1 group shadow-sm rounded-full">
+                            <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none text-maghreb-primary/70 group-focus-within:text-maghreb-primary transition-colors">
+                                <Search size={22} />
                             </div>
+                            <input
+                                type="text"
+                                placeholder="Rechercher par nom, ville, spécialité..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                disabled={!isOnline && !guides}
+                                className="w-full pl-16 pr-6 py-4 bg-white border border-slate-200 rounded-full text-slate-800 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-maghreb-primary/30 focus:border-maghreb-primary/50 transition-all disabled:opacity-50 shadow-inner"
+                            />
+                        </div>
+                    </motion.div>
+                </div>
+            </div>
 
-                            <div className="flex-1 flex flex-col">
-                                <div className="flex justify-between items-start mb-3">
-                                    <div>
-                                        <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                                            {guide.name}
-                                            {guide.availability ?
-                                                <span className="flex items-center text-xs px-2.5 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-full font-bold uppercase tracking-wider"><CalendarCheck size={12} className="mr-1.5" /> Available</span> :
-                                                <span className="flex items-center text-xs px-2.5 py-1 bg-slate-500/10 text-slate-400 border border-slate-500/20 rounded-full font-bold uppercase tracking-wider"><CalendarX size={12} className="mr-1.5" /> Booked</span>
-                                            }
-                                        </h2>
-                                        <p className="text-indigo-400 font-medium text-sm mt-1">{guide.baseCity}, {guide.country}</p>
-                                    </div>
-                                    <div className="text-right bg-slate-800/50 px-4 py-2 rounded-2xl border border-white/5 shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)]">
-                                        <span className="text-2xl font-bold text-white block leading-none">{guide.hourlyRate} <span className="text-sm font-medium text-slate-400">{guide.currency} / hr</span></span>
-                                    </div>
-                                </div>
+            <div className="max-w-5xl mx-auto px-6 relative z-10">
+                {isLoading && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        {[1, 2, 3, 4].map(i => (
+                            <div key={i} className="animate-pulse bg-white h-[450px] rounded-[2.5rem] rounded-b-xl border border-slate-100 shadow-sm"></div>
+                        ))}
+                    </div>
+                )}
 
-                                <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-6 text-sm flex-1">
-                                    <div className="flex items-start gap-3 text-slate-300">
-                                        <Briefcase size={18} className="text-slate-500 shrink-0 mt-0.5" />
-                                        <div className="flex flex-wrap gap-2">
-                                            {guide.specialties.map(s => <span key={s} className="px-2.5 py-1 bg-white/5 rounded-lg border border-white/5 font-medium">{s}</span>)}
+                <AnimatePresence>
+                    {!isLoading && !filteredGuides && !isOnline && (
+                        <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="p-8 text-center bg-white rounded-3xl border border-slate-200 shadow-sm">
+                            <WifiOff size={48} className="mx-auto mb-4 text-slate-300" />
+                            <p className="text-slate-500 font-medium text-lg">Mode hors ligne actif. Connectez-vous pour télécharger l'annuaire.</p>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+
+                {filteredGuides && (
+                    <motion.div variants={containerVariants} initial="hidden" animate="show" className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        {filteredGuides.map(guide => (
+                            <motion.div key={guide.id} variants={itemVariants} className="group relative flex flex-col bg-white rounded-[2.5rem] rounded-b-xl border border-slate-100 overflow-hidden hover:border-maghreb-primary/30 hover:shadow-warm transition-all duration-300">
+
+                                <div className="h-48 relative overflow-hidden bg-slate-100">
+                                    <div className="absolute inset-0 bg-linear-to-t from-slate-900/60 to-transparent z-10" />
+                                    <div className="absolute inset-0 z-0 opacity10 mix-blend-overlay bg-[url('data:image/svg+xml,%3Csvg width=\\'40\\' height=\\'40\\' viewBox=\\'0 0 40 40\\' xmlns=\\'http://www.w3.org/2000/svg\\'%3E%3Cpath d=\\'M20 20.5V18H0v-2h20v-2H0v-2h20v-2H0V8h20V6H0V4h20V2H0V0h22v20h2V0h2v20h2V0h2v20h2V0h2v20h2V0h2v20h2v2H20v-1.5z\\' fill=\\'%23c84b31\\' fill-opacity=\\'1\\' fill-rule=\\'evenodd\\'/%3E%3C/svg%3E')]" />
+                                    <img src="https://images.unsplash.com/photo-1548048026-5a1a941d93d3?auto=format&fit=crop&q=80&w=500" alt="Cover" className="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-100" />
+
+                                    <div className="absolute top-4 left-4 z-20">
+                                        {guide.availability ?
+                                            <span className="flex items-center text-[10px] px-3 py-1.5 bg-white/90 backdrop-blur-md text-maghreb-olive border border-white/20 rounded-full font-bold uppercase tracking-widest shadow-sm"><CalendarCheck size={12} className="mr-1.5" /> Disponible</span> :
+                                            <span className="flex items-center text-[10px] px-3 py-1.5 bg-slate-800/80 backdrop-blur-md text-slate-300 border border-slate-600/50 rounded-full font-bold uppercase tracking-widest shadow-sm"><CalendarX size={12} className="mr-1.5" /> Occupé</span>
+                                        }
+                                    </div>
+                                    <div className="absolute top-4 right-4 z-20">
+                                        <div className="flex items-center gap-1.5 bg-maghreb-gold/90 backdrop-blur-md text-white font-bold px-3 py-1.5 text-xs rounded-full shadow-sm">
+                                            <Star size={12} className="fill-current" /> {guide.rating}
                                         </div>
                                     </div>
-                                    <div className="flex items-center gap-3 text-slate-300">
-                                        <Languages size={18} className="text-slate-500 shrink-0" />
-                                        <span className="font-medium">{guide.languages.join(" • ")}</span>
-                                    </div>
                                 </div>
 
-                                <div className="mt-6 flex justify-end gap-4 border-t border-white/5 pt-6">
-                                    <motion.button
-                                        whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-                                        onClick={() => setActiveModal({ type: 'contact', guide })}
-                                        className="flex items-center gap-2 px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-white rounded-xl transition-colors font-bold text-sm border border-white/5 shadow-[0_4px_14px_0_rgba(0,0,0,0.39)]"
-                                    >
-                                        <MessageSquare size={16} /> Contact
-                                    </motion.button>
-                                    <motion.button
-                                        whileHover={{ scale: guide.availability ? 1.05 : 1 }} whileTap={{ scale: guide.availability ? 0.95 : 1 }}
-                                        disabled={!guide.availability}
-                                        onClick={() => setActiveModal({ type: 'booking', guide })}
-                                        className="flex items-center gap-2 px-8 py-2.5 bg-indigo-500 hover:bg-indigo-600 disabled:bg-slate-800/50 disabled:text-slate-600 disabled:border-slate-800 text-white rounded-xl transition-colors font-bold border border-indigo-400 shadow-[0_4px_14px_0_rgba(99,102,241,0.39)]"
-                                    >
-                                        Request Booking
-                                    </motion.button>
+                                <div className="p-6 flex flex-col flex-1 relative z-20 pt-0">
+                                    <div className="flex justify-between items-end mb-4 -mt-10 relative z-30">
+                                        <div className="relative">
+                                            <img src={guide.avatarUrl} alt={guide.name} className="relative w-20 h-20 rounded-2xl border-4 border-white object-cover bg-white shadow-sm" />
+                                        </div>
+                                        <div className="text-right">
+                                            <span className="text-2xl font-bold text-slate-800 block leading-none">{guide.hourlyRate} <span className="text-sm font-medium text-slate-500">{guide.currency} / h</span></span>
+                                        </div>
+                                    </div>
+
+                                    <div className="mb-4">
+                                        <h2 className="text-2xl font-serif font-bold text-slate-800 mb-1 leading-tight group-hover:text-maghreb-primary transition-colors">
+                                            {guide.name}
+                                        </h2>
+                                        <p className="text-maghreb-secondary font-semibold text-sm flex items-center gap-1.5"><MapPin size={14} /> {guide.baseCity}, {guide.country}</p>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 gap-y-3 gap-x-6 text-sm flex-1 mb-6">
+                                        <div className="flex items-start gap-3">
+                                            <Briefcase size={16} className="text-maghreb-primary/60 shrink-0 mt-0.5" />
+                                            <div className="flex flex-wrap gap-2 text-slate-600 font-medium">
+                                                {guide.specialties.map(s => <span key={s} className="px-2.5 py-1 bg-maghreb-sand rounded-lg text-slate-700">{s}</span>)}
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center gap-3">
+                                            <Languages size={16} className="text-maghreb-primary/60 shrink-0" />
+                                            <span className="font-medium text-slate-600">{guide.languages.join(" • ")}</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex justify-end gap-3 pt-5 border-t border-slate-100 mt-auto">
+                                        <motion.button
+                                            whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+                                            onClick={() => setActiveModal({ type: 'contact', guide })}
+                                            className="flex-1 flex justify-center items-center gap-2 px-4 py-3 bg-white hover:bg-slate-50 text-slate-700 rounded-xl transition-colors font-bold text-sm border border-slate-200 shadow-sm"
+                                        >
+                                            <MessageSquare size={16} /> Contacter
+                                        </motion.button>
+                                        <motion.button
+                                            whileHover={{ scale: guide.availability ? 1.05 : 1 }} whileTap={{ scale: guide.availability ? 0.95 : 1 }}
+                                            disabled={!guide.availability}
+                                            onClick={() => setActiveModal({ type: 'booking', guide })}
+                                            className="flex-[1.5] flex justify-center items-center gap-2 px-4 py-3 bg-maghreb-primary hover:bg-maghreb-primaryLight disabled:bg-slate-100 disabled:text-slate-400 disabled:border-slate-200 disabled:shadow-none text-white rounded-xl transition-colors font-bold text-sm shadow-md"
+                                        >
+                                            Réserver
+                                        </motion.button>
+                                    </div>
                                 </div>
+                            </motion.div>
+                        ))}
+                        {filteredGuides.length === 0 && (
+                            <div className="col-span-full p-12 text-center bg-white rounded-3xl border border-slate-200 text-slate-500 shadow-sm">
+                                <span className="block text-4xl mb-4">🔍</span>
+                                Aucun expert local ne correspond à "{searchTerm}".
                             </div>
-                        </motion.div>
-                    ))}
-                    {filteredGuides.length === 0 && (
-                        <div className="p-12 text-center bg-slate-900/50 rounded-3xl border border-white/5 text-slate-400 backdrop-blur-md">
-                            No local experts found matching "{searchTerm}".
-                        </div>
-                    )}
-                </motion.div>
-            )}
+                        )}
+                    </motion.div>
+                )}
+            </div>
 
             <AnimatePresence>
                 {activeModal && (
                     <motion.div
                         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0a0f1e]/80 backdrop-blur-md"
+                        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm"
                     >
                         <motion.div
                             initial={{ scale: 0.9, y: 20, opacity: 0 }} animate={{ scale: 1, y: 0, opacity: 1 }} exit={{ scale: 0.9, y: 20, opacity: 0 }}
-                            className="bg-slate-900 border border-indigo-500/30 rounded-3xl p-8 max-w-lg w-full shadow-[0_0_50px_rgba(99,102,241,0.15)] relative"
+                            className="bg-white rounded-3xl p-8 max-w-lg w-full shadow-warm relative overflow-hidden"
                         >
                             <button
                                 onClick={() => { setActiveModal(null); setSubmitSuccess(false); }}
-                                className="absolute top-6 right-6 text-slate-400 hover:text-white transition-colors p-1 bg-white/5 rounded-full hover:bg-white/10"
+                                className="absolute top-6 right-6 text-slate-400 hover:text-slate-800 transition-colors p-2 bg-slate-100 rounded-full hover:bg-slate-200 z-20"
                             >
                                 <X size={20} />
                             </button>
 
                             {submitSuccess ? (
-                                <div className="flex flex-col items-center py-10">
-                                    <div className="w-16 h-16 bg-emerald-500/20 text-emerald-400 flex items-center justify-center rounded-full mb-4">
-                                        <Send size={32} />
-                                    </div>
-                                    <h3 className="text-2xl font-bold text-white mb-2">Message Sent!</h3>
-                                    <p className="text-slate-400 text-center">
-                                        {activeModal.guide.name} has been notified and will reply to your device locally as soon as possible.
+                                <div className="flex flex-col items-center py-10 relative z-10">
+                                    <motion.div
+                                        initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring" }}
+                                        className="w-20 h-20 bg-maghreb-olive/20 text-maghreb-olive flex items-center justify-center rounded-full mb-6"
+                                    >
+                                        <Send size={40} />
+                                    </motion.div>
+                                    <h3 className="text-3xl font-serif font-bold text-slate-800 mb-3 text-center">Message Envoyé !</h3>
+                                    <p className="text-slate-600 text-center">
+                                        <strong className="text-slate-800">{activeModal.guide.name}</strong> a été notifié(e) et vous répondra dès que possible.
                                     </p>
                                 </div>
                             ) : (
-                                <>
-                                    <h3 className="text-2xl font-bold text-white mb-2 pr-8 leading-tight">
-                                        {activeModal.type === "contact" ? "Send a Message to" : "Request Booking with"} <span className="text-indigo-400">{activeModal.guide.name}</span>
+                                <div className="relative z-10 text-slate-800">
+                                    <h3 className="text-2xl font-serif font-bold text-slate-800 mb-2 pr-8 leading-tight">
+                                        {activeModal.type === "contact" ? "Contacter" : "Réserver avec"} <span className="text-maghreb-primary">{activeModal.guide.name}</span>
                                     </h3>
-                                    <p className="text-slate-400 text-sm mb-6 pb-6 border-b border-white/5">
-                                        {activeModal.type === "contact" ? "Ask about their localized craft, custom tour details, or language preferences." : `Mock a booking for their services at ${activeModal.guide.hourlyRate} ${activeModal.guide.currency}/hr.`}
+                                    <p className="text-slate-500 font-medium text-sm mb-6 pb-6 border-b border-slate-100">
+                                        {activeModal.type === "contact" ? "Posez vos questions sur son artisanat ou ses visites sur-mesure." : `Simulez une réservation à ${activeModal.guide.hourlyRate} ${activeModal.guide.currency}/h.`}
                                     </p>
 
-                                    <form onSubmit={handleFakeSubmit} className="flex flex-col gap-4">
+                                    <form onSubmit={handleFakeSubmit} className="flex flex-col gap-5">
                                         {activeModal.type === "booking" && (
-                                            <div className="flex gap-4">
+                                            <div className="flex gap-5">
                                                 <div className="flex-1">
-                                                    <label className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5 block">Date</label>
-                                                    <input type="date" required className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-indigo-500 transition-colors" />
+                                                    <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-2 block">Date</label>
+                                                    <input type="date" required className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 focus:outline-none focus:border-maghreb-primary focus:ring-1 focus:ring-maghreb-primary transition-all" />
                                                 </div>
                                                 <div className="flex-1">
-                                                    <label className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5 block">Hours</label>
-                                                    <input type="number" min="1" max="12" placeholder="Ex: 4" required className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-indigo-500 transition-colors" />
+                                                    <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-2 block">Heures</label>
+                                                    <input type="number" min="1" max="12" placeholder="Ex: 4" required className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 focus:outline-none focus:border-maghreb-primary focus:ring-1 focus:ring-maghreb-primary transition-all" />
                                                 </div>
                                             </div>
                                         )}
                                         <div>
-                                            <label className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5 block">
-                                                {activeModal.type === "contact" ? "Your Message" : "Additional Requests"}
+                                            <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-2 block">
+                                                {activeModal.type === "contact" ? "Votre Message" : "Demandes Spéciales"}
                                             </label>
                                             <textarea
                                                 required={activeModal.type === "contact"}
                                                 rows={4}
-                                                placeholder={activeModal.type === "contact" ? "Hi there, I'd like to ask..." : "Do you provide off-road transportation?"}
-                                                className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-indigo-500 transition-colors resize-none"
+                                                placeholder={activeModal.type === "contact" ? "Bonjour, je souhaiterais..." : "Avez-vous un véhicule adapté ?"}
+                                                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 focus:outline-none focus:border-maghreb-primary focus:ring-1 focus:ring-maghreb-primary transition-all resize-none"
                                             />
                                         </div>
 
@@ -226,12 +252,12 @@ export default function Directory() {
                                             whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
                                             disabled={isSubmitting}
                                             type="submit"
-                                            className="mt-4 flex items-center justify-center gap-2 w-full py-4 bg-indigo-500 hover:bg-indigo-600 text-white rounded-xl transition-colors font-bold border border-indigo-400 disabled:opacity-70 disabled:cursor-wait"
+                                            className="mt-2 flex items-center justify-center gap-2 w-full py-4 bg-maghreb-primary hover:bg-maghreb-primaryLight text-white rounded-xl transition-colors font-bold text-lg disabled:opacity-70 shadow-warm disabled:shadow-none"
                                         >
-                                            {isSubmitting ? "Processing..." : activeModal.type === "contact" ? "Send Message" : "Confirm Booking Hold"}
+                                            {isSubmitting ? "Traitement..." : activeModal.type === "contact" ? "Envoyer le Message" : "Confirmer la Réservation"}
                                         </motion.button>
                                     </form>
-                                </>
+                                </div>
                             )}
                         </motion.div>
                     </motion.div>
